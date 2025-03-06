@@ -8,38 +8,40 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>AsteroidsFX</name>
+
   <modules>
     <module>Core</module>
+    <module>Player</module>
+    <module>Bullet</module>
   </modules>
+
   <properties>
+    <java>java</java>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>1.9</maven.compiler.source>
+    <maven.compiler.target>1.9</maven.compiler.target>
   </properties>
   <dependencyManagement>
-    <dependencies />
+    <dependencies>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>21.0.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-graphics</artifactId>
+        <version>21.0.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-base</artifactId>
+        <version>21.0.2</version>
+      </dependency>
+    </dependencies>
   </dependencyManagement>
   <build>
     <plugins>
-      <!-- Copies all module jars to the mods-mvn folder -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>3.1.2</version>
-        <executions>
-          <execution>
-            <id>copy-modules</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.basedir}/mods-mvn</outputDirectory>
-              <includeScope>runtime</includeScope>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <version>3.2.0</version>
@@ -64,13 +66,16 @@
           </execution>
         </executions>
         <configuration>
-          <executable>java</executable>
+          <executable>${java}</executable>
           <workingDirectory>.</workingDirectory>
           <longModulepath>false</longModulepath>
           <arguments>
+            <argument>-Dorg.lwjgl.util.Debug=true</argument>
+            <argument>-Djava.library.path=libs</argument>
             <argument>--module-path=mods-mvn</argument>
             <argument>--class-path=libs/*</argument>
-            <argument>--module=Core/dk.sdu.cbse.App</argument>
+            <argument>--module=Core/dk.sdu.cbse.main.App</argument>
+
           </arguments>
         </configuration>
       </plugin>
@@ -131,7 +136,7 @@
                       <type>jar</type>
                     </artifactItem>
                   </artifactItems>
-                  <outputDirectory>${project.parent.basedir}/mods-mvn</outputDirectory>
+                  <outputDirectory>../mods-mvn</outputDirectory>
                 </configuration>
               </execution>
             </executions>
