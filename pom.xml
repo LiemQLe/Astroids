@@ -8,13 +8,12 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>AsteroidsFX</name>
-
   <modules>
     <module>Core</module>
     <module>Player</module>
     <module>Bullet</module>
+    <module>Common</module>
   </modules>
-
   <properties>
     <java>java</java>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,6 +22,26 @@
   </properties>
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>Common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>Core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>Player</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>Bullet</artifactId>
+        <version>${project.version}</version>
+      </dependency>
       <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-controls</artifactId>
@@ -75,7 +94,6 @@
             <argument>--module-path=mods-mvn</argument>
             <argument>--class-path=libs/*</argument>
             <argument>--module=Core/dk.sdu.cbse.main.App</argument>
-
           </arguments>
         </configuration>
       </plugin>

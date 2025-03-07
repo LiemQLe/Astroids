@@ -1,3 +1,3 @@
 module Player {
-
+    requires Common;
 }

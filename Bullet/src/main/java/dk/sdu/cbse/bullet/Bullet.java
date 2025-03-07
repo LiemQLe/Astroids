@@ -1,13 +1,12 @@
 package dk.sdu.cbse.bullet;
 
+import dk.sdu.cbse.common.data.*;
+
+
 /**
  * Hello world!
  *
  */
-public class Bullet 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
-    }
+public class Bullet extends Entity{
+ 
 }
