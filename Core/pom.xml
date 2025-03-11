@@ -23,6 +23,11 @@
   <!-- <url>http://maven.apache.org</url> -->
   <dependencies>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>Common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
     </dependency>

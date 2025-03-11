@@ -5,8 +5,11 @@ import java.util.UUID;
 public class Entity {
     
     private final UUID ID;
-    private int x;
-    private int y;
+    
+    private double x;
+    private double y;
+    private double rotation;
+    private double[] polygonCoordinates;
 
     public Entity() {
         this.ID = UUID.randomUUID();
@@ -16,25 +19,41 @@ public class Entity {
         return ID.toString();
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setPosition(int x, int y) {
+    public void setPosition(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
+    }
+
+    public void setRotation(double rotation){
+        this.rotation = rotation;
+    }
+
+    public double getRotation(){
+        return this.rotation;
+    }
+
+    public void setPolygonCoordination(double... coordinates){
+        this.polygonCoordinates = coordinates;
+    }
+
+    public double[] getPolygonCoordinates(){
+        return this.polygonCoordinates;
     }
 
 }
