@@ -3,7 +3,7 @@ package dk.sdu.cbse.playersystem;
 import dk.sdu.cbse.common.data.Entity;
 
 
-public class PlayerPlugin {
+public class PlayerPlugin implements {
 
     private Entity player;
 
