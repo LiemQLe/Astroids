@@ -19,7 +19,9 @@ import dk.sdu.cbse.common.data.Entity;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.World;
 import dk.sdu.cbse.common.data.GameKeys;
-import dk.sdu.cbse.common.services.*;
+import dk.sdu.cbse.common.services.IEntityProcessingService;
+import dk.sdu.cbse.common.services.IPostEntityProcessingService;
+import dk.sdu.cbse.common.services.IGamePluginService;
 
 /**
  * Hello world!
@@ -85,7 +87,6 @@ public class App extends Application {
             polygons.put(entity, polygon);
             gameWindow.getChildren().add(polygon);
         }
-
         render();
         primaryStage.setScene(scene);
         primaryStage.setTitle("Asteroids");
@@ -150,4 +151,8 @@ public class App extends Application {
         return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get)
                 .collect(toList());
     }
+
+
+    
+    
 }
