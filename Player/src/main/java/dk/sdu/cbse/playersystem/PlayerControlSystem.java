@@ -1,32 +1,44 @@
 package dk.sdu.cbse.playersystem;
 
+import java.util.Collection;
+import java.util.ServiceLoader;
+
 import dk.sdu.cbse.common.data.Entity;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameKeys;
 import dk.sdu.cbse.common.data.World;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
+import dk.sdu.cbse.commonbullet.BulletSpawnerInterface;
+
+import static java.util.stream.Collectors.toList;
 
 public class PlayerControlSystem implements IEntityProcessingService {
 
     @Override
     public void process(GameData gameData, World world) {
-        System.out.println(world.getEntities(Player.class).size());
         for (Entity player : world.getEntities(Player.class)) {
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
                 player.setRotation(player.getRotation() - 5);
-                System.out.println("Player turning left");
             }
             if (gameData.getKeys().isDown(GameKeys.RIGHT)) {
                 player.setRotation(player.getRotation() + 5);
             }
             if (gameData.getKeys().isDown(GameKeys.UP)) {
-                double changeX = Math.cos(Math.toRadians(player.getRotation()));
-                double changeY = Math.sin(Math.toRadians(player.getRotation()));
-                player.setX(player.getX() + changeX);
-                player.setY(player.getY() + changeY);
+                double delta = gameData.getDelta();
+
+                double dx = Math.cos(Math.toRadians(player.getRotation()))* delta * player.getSpeed();
+                double dy = Math.sin(Math.toRadians(player.getRotation()))* delta * player.getSpeed();
+
+                player.setX(player.getX() + dx);
+                player.setY(player.getY() + dy);
             }
             if (gameData.getKeys().isDown(GameKeys.SPACE)) {
-                // Implement shooting
+
+                getBulletSPI().stream().findFirst().ifPresent(
+                        spi -> {
+                            world.addEntity(spi.createBullet(player, gameData));
+                        });
+                    
             }
 
             if (player.getX() < 0) {
@@ -48,4 +60,9 @@ public class PlayerControlSystem implements IEntityProcessingService {
         }
     }
 
+    // Service loader for bullet spawner
+    private Collection<? extends BulletSpawnerInterface> getBulletSPI() {
+        return ServiceLoader.load(BulletSpawnerInterface.class).stream().map(ServiceLoader.Provider::get)
+                .collect(toList());
+    }
 }

@@ -7,7 +7,7 @@ public interface IEntityProcessingService {
     
     /**
      *
-     * Update the entity based on the game data and world
+     * Update the entity based on the game data and world each tick
      * Can also say it updates based on frame
      *
      * @param gameData

@@ -105,11 +105,24 @@ public class App extends Application {
 
     private void render() {
         new AnimationTimer() {
+            private long lastTime = 0;
             @Override
             public void handle(long now) {
+                
+                if(lastTime == 0){
+                    lastTime = now;
+                    return;
+                }
+
+                double delta = (now - lastTime) / 1_000_000_000.0; // Convert nanos to seconds
+                gameData.setDelta(delta);
+                
+                
                 update();
                 draw();
                 gameData.getKeys().update();
+
+                lastTime = now;
             }
 
         }.start();
@@ -126,10 +139,12 @@ public class App extends Application {
 
         for (Entity entity : world.getEntities()) {
             Polygon polygon = polygons.get(entity);
+            // Draw new entities
             if (polygon == null) {
                 polygon = new Polygon(entity.getPolygonCoordinates());
+                
                 polygons.put(entity, polygon);
-                gameWindow.getChildren().add(polygon);
+                gameWindow.getChildren().add(polygon);   
             }
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());

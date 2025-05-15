@@ -9,11 +9,12 @@
   <packaging>pom</packaging>
   <name>AsteroidsFX</name>
   <modules>
-    <module>Core</module>
-    <module>Player</module>
-    <module>Bullet</module>
     <module>Common</module>
     <module>Astroid</module>
+    <module>CommonBullet</module>
+    <module>Bullet</module>
+    <module>Player</module>
+    <module>Core</module>
   </modules>
   <properties>
     <java>java</java>
