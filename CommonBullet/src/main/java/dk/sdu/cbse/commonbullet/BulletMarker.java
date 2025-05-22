@@ -7,6 +7,11 @@ import dk.sdu.cbse.common.data.Entity;
  * It extends the Entity class and serves as a marker for bullet entities.
  * This class can be used to identify bullet entities in the game world.
  */
-public class Bullet extends Entity{
-
+public interface BulletMarker {
+    /**
+     * Sets the owner of the bullet.
+     *
+     * @param owner The entity that owns the bullet.
+     */
+    Entity getOwner();
 } 

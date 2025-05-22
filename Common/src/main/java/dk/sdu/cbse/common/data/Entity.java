@@ -112,5 +112,8 @@ public class Entity {
     public void setSpeed(float speed) {
         this.speed = speed;
     }
+    
+
+
 
 }

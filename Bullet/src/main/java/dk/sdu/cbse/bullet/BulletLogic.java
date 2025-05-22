@@ -30,13 +30,15 @@ public void process(GameData gameData, World world) {
     @Override
     public Entity createBullet(Entity e, GameData gameData) {
         Bullet bullet = new Bullet();
+
+        // Used to make sure the bullets won't hurt the shooter itself
+        bullet.setOwner(e);
+
         bullet.setSpeed(600f);
-        bullet.setPosition(e.getX(), e.getY());
+        bullet.setPosition(e.getX() , e.getY());
         bullet.setRotation(e.getRotation());
         bullet.setPolygonCoordination(1, -1, 1, 1, -1, 1, -1, -1);
 
-        System.out.println("Bullet created at: " + bullet.getX() + ", " + bullet.getY());
-        System.out.println("Bullet polygon: " + bullet.getPolygonCoordinates());
 
         return bullet;
 
