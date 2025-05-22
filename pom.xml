@@ -14,8 +14,8 @@
     <module>CommonBullet</module>
     <module>Bullet</module>
     <module>Player</module>
-    <module>Core</module>
     <module>Collision</module>
+    <module>Core</module>
   </modules>
   <properties>
     <java>java</java>
@@ -59,6 +59,16 @@
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-base</artifactId>
         <version>21.0.2</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>Asteroid</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>Collision</artifactId>
+        <version>${project.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

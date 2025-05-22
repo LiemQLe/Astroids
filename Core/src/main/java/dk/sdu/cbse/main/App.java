@@ -135,10 +135,10 @@ public class App extends Application {
     private void draw() {
        
 
-        for (Entity polygonEntity : polygons.keySet()) {
-            if (!world.getEntities().contains(polygonEntity)) {
-                Polygon removedPolygon = polygons.get(polygonEntity);
-                polygons.remove(polygonEntity);
+        for (Entity entity : polygons.keySet()) {
+            if (!world.getEntities().contains(entity)) {
+                Polygon removedPolygon = polygons.get(entity);
+                polygons.remove(entity);
                 gameWindow.getChildren().remove(removedPolygon);
             }
         }
@@ -152,11 +152,22 @@ public class App extends Application {
                 polygons.put(entity, polygon);
                 gameWindow.getChildren().add(polygon);
 
-                System.out.println("Entity: " + entity.getClass().getSimpleName());
-                         
-
+                
+                
                 
             }
+            // Set the color of the polygon based on the entity type
+            if (entity.getClass().getSimpleName().equals("Player")) {
+                polygon.setFill(Color.LIGHTBLUE);
+                polygon.setStroke(Color.BLUE);
+            } else if (entity.getClass().getSimpleName().equals("Bullet")) {
+                polygon.setFill(Color.YELLOW);
+                polygon.setStroke(Color.GOLD);
+            } else if (entity.getClass().getSimpleName().equals("Asteroid")) {
+                polygon.setFill(null);
+                polygon.setStroke(Color.SLATEGRAY);
+            }      
+            
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());
             polygon.setRotate(entity.getRotation());
