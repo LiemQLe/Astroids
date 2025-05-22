@@ -1,6 +1,7 @@
 package dk.sdu.cbse.common.data;
 
 import java.util.UUID;
+import javafx.scene.shape.Polygon;
 
 public class Entity {
     
@@ -83,6 +84,26 @@ public class Entity {
     public double[] getPolygonCoordinates() {
         return this.polygonCoordinates;
     }
+
+    public Polygon getTransformedPolygon() {
+        double[] polygonCoordinates = this.getPolygonCoordinates();
+        Polygon polygon = new Polygon();
+        
+        double angle = Math.toRadians(this.getRotation());
+        double cos = Math.cos(angle);
+        double sin = Math.sin(angle);
+
+        for(int i = 0; i < polygonCoordinates.length; i += 2) {
+            double x = polygonCoordinates[i];
+            double y = polygonCoordinates[i + 1];
+
+            double transformedX = x * cos - y * sin + this.getX();
+            double transformedY = x * sin + y * cos + this.getY();
+
+            polygon.getPoints().addAll(transformedX, transformedY);
+        }
+        return polygon;
+    }   
 
     public float getSpeed() {
         return speed;
