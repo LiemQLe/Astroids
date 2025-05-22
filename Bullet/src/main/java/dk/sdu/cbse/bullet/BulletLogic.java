@@ -12,7 +12,7 @@ public void process(GameData gameData, World world) {
     double delta = gameData.getDelta();
 
     for (Entity bullet : world.getEntities(Bullet.class)) {
-        System.out.println(delta);
+        
         //move the bullet in the direction it is facing
         double dx = Math.cos(Math.toRadians(bullet.getRotation())) * bullet.getSpeed();
         double dy = Math.sin(Math.toRadians(bullet.getRotation())) * bullet.getSpeed();
@@ -34,6 +34,10 @@ public void process(GameData gameData, World world) {
         bullet.setPosition(e.getX(), e.getY());
         bullet.setRotation(e.getRotation());
         bullet.setPolygonCoordination(1, -1, 1, 1, -1, 1, -1, -1);
+
+        System.out.println("Bullet created at: " + bullet.getX() + ", " + bullet.getY());
+        System.out.println("Bullet polygon: " + bullet.getPolygonCoordinates());
+
         return bullet;
 
     }

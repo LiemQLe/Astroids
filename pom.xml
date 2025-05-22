@@ -10,7 +10,7 @@
   <name>AsteroidsFX</name>
   <modules>
     <module>Common</module>
-    <module>Astroid</module>
+    <module>Asteroid</module>
     <module>CommonBullet</module>
     <module>Bullet</module>
     <module>Player</module>

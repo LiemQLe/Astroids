@@ -4,6 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.shape.Polygon;
@@ -14,6 +15,8 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
 import static java.util.stream.Collectors.toList;
+
+import java.util.Arrays;
 
 import dk.sdu.cbse.common.data.Entity;
 import dk.sdu.cbse.common.data.GameData;
@@ -92,6 +95,7 @@ public class App extends Application {
         primaryStage.setTitle("Asteroids");
         primaryStage.show();
 
+
     }
 
     private void update() {
@@ -106,18 +110,18 @@ public class App extends Application {
     private void render() {
         new AnimationTimer() {
             private long lastTime = 0;
+
             @Override
             public void handle(long now) {
-                
-                if(lastTime == 0){
+
+                if (lastTime == 0) {
                     lastTime = now;
                     return;
                 }
 
                 double delta = (now - lastTime) / 1_000_000_000.0; // Convert nanos to seconds
                 gameData.setDelta(delta);
-                
-                
+
                 update();
                 draw();
                 gameData.getKeys().update();
@@ -129,6 +133,8 @@ public class App extends Application {
     }
 
     private void draw() {
+       
+
         for (Entity polygonEntity : polygons.keySet()) {
             if (!world.getEntities().contains(polygonEntity)) {
                 Polygon removedPolygon = polygons.get(polygonEntity);
@@ -142,9 +148,14 @@ public class App extends Application {
             // Draw new entities
             if (polygon == null) {
                 polygon = new Polygon(entity.getPolygonCoordinates());
-                
+
                 polygons.put(entity, polygon);
-                gameWindow.getChildren().add(polygon);   
+                gameWindow.getChildren().add(polygon);
+
+                System.out.println("Entity: " + entity.getClass().getSimpleName());
+                         
+
+                
             }
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());
@@ -167,7 +178,4 @@ public class App extends Application {
                 .collect(toList());
     }
 
-
-    
-    
 }
