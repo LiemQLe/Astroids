@@ -52,6 +52,7 @@ public class AsteroidsPlugin implements IGamePluginService {
                 asteroid.setY(gameData.getDisplayHeight());
                 break;
         }
+        asteroid.setRadius(asteroid.calcRadius());
         asteroid.setSpeed(50);
 
         // Set the rotation of the asteroid towards the center of the screen

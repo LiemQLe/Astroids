@@ -30,6 +30,7 @@ public class PlayerPlugin implements IGamePluginService{
         playerShip.setPolygonCoordination(-5,-5,10,0,-5,5);
         playerShip.setX(gameData.getDisplayWidth() / 2);
         playerShip.setY(gameData.getDisplayHeight() / 2);
+        playerShip.setRadius(playerShip.calcRadius());
         return playerShip;
     }
 

@@ -15,37 +15,46 @@ public class CollisionProcessor implements IEntityProcessingService, IGamePlugin
         for (Entity entityA : world.getEntities()) {
             for (Entity entityB : world.getEntities()) {
                 if (entityA != entityB && checkCollision(entityA, entityB)) {
-                    handleCollision(entityA, entityB);
+                    handleCollision(entityA, entityB, world);
                 }
             }
         }
     }
 
     private boolean checkCollision(Entity entityA, Entity entityB) {
-        if (Shape.intersect(entityA.getTransformedPolygon(), entityB.getTransformedPolygon()).getBoundsInLocal()
-                .getWidth() > 0) {
+        double radiusSum = entityA.getRadius() + entityB.getRadius();
+        double dist = Math.sqrt(Math.pow(entityA.getX() - entityB.getX(), 2) + Math.pow(entityA.getY() - entityB.getY(), 2));
+        if( dist < radiusSum) {
+            
             return true;
         }
         return false;
     }
 
-    private void handleCollision(Entity entityA, Entity entityB) {
-        //System.out.println("Collision Detected between " + entityA.getClass().getSimpleName() + " and " + entityB.getClass().getSimpleName());
+    private void handleCollision(Entity entityA, Entity entityB, World world) {
+       
         // Bullet collision
         if (entityA instanceof BulletMarker){
             BulletMarker bulletA = (BulletMarker) entityA;
-            System.out.println(bulletA.getOwner().getID() + " ----------------- " + entityB.getID());
             if(bulletA.getOwner().getID().equals(entityB.getID())){
-                //In case the bullet come from shooter and hit shooter do nothing
+                // In case the bullet come from shooter and hit shooter do nothing
                 return;
             }
+            // Remove bullet from world and hit entity
+            world.removeEntity((Entity) bulletA);
+            world.removeEntity((Entity) entityB);
+
         }else if (entityB instanceof BulletMarker){
             BulletMarker bulletB = (BulletMarker) entityB;
             if(bulletB.getOwner().getID().equals(entityA.getID())){
                 //In case the bullet come from shooter and hit shooter do nothing
                 return;
             }
+            // Remove bullet from world and hit entity
+            world.removeEntity((Entity) bulletB);
+            world.removeEntity((Entity) entityA);
         }
+
 
     }
 

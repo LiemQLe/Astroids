@@ -17,6 +17,7 @@ public class Entity {
     private double[] polygonCoordinates;
 
     private float speed;
+    private double radius;
 
     public Entity() {
         this.ID = UUID.randomUUID();
@@ -85,26 +86,6 @@ public class Entity {
         return this.polygonCoordinates;
     }
 
-    public Polygon getTransformedPolygon() {
-        double[] polygonCoordinates = this.getPolygonCoordinates();
-        Polygon polygon = new Polygon();
-        
-        double angle = Math.toRadians(this.getRotation());
-        double cos = Math.cos(angle);
-        double sin = Math.sin(angle);
-
-        for(int i = 0; i < polygonCoordinates.length; i += 2) {
-            double x = polygonCoordinates[i];
-            double y = polygonCoordinates[i + 1];
-
-            double transformedX = x * cos - y * sin + this.getX();
-            double transformedY = x * sin + y * cos + this.getY();
-
-            polygon.getPoints().addAll(transformedX, transformedY);
-        }
-        return polygon;
-    }   
-
     public float getSpeed() {
         return speed;
     }
@@ -113,7 +94,28 @@ public class Entity {
         this.speed = speed;
     }
     
+    public double getRadius() {
+        return radius;
+    }
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
 
+    public double calcRadius() {
+        if (polygonCoordinates == null || polygonCoordinates.length < 2) {
+            return 0;
+        }
+        double maxDistance = 0;
+        for (int i = 0; i < polygonCoordinates.length; i += 2) {
+            double x = polygonCoordinates[i];
+            double y = polygonCoordinates[i + 1];
+            double distance = Math.sqrt(x * x + y * y);
+            if (distance > maxDistance) {
+                maxDistance = distance;
+            }
+        }
+        return maxDistance;
+    }
 
 
 }
