@@ -1,5 +1,5 @@
 module CommonAsteroid {
-    requires Common;
+    requires transitive Common;
     exports dk.sdu.cbse.commonasteroid;
     
 }

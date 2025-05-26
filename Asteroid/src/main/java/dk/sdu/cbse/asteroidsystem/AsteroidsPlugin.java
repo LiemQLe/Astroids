@@ -25,12 +25,12 @@ public class AsteroidsPlugin implements IGamePluginService {
     public Entity createAsteroid(GameData gameData, World world) {
         Asteroid asteroid = new Asteroid();
         asteroid.setPolygonCoordination(
-                30, 0,
-                15, 25.98,
-                -15, 25.98,
-                -30, 0,
-                -15, -25.98,
-                15, -25.98);
+                90, 0,
+                45, 75,
+                -45, 75,
+                -90, 0,
+                -45, -75,
+                45, -75);
 
         // Decide spawn point for asteroid randomly
         int rand = (int) (Math.random() * 4);
@@ -55,6 +55,7 @@ public class AsteroidsPlugin implements IGamePluginService {
         asteroid.setRadius(asteroid.calcRadius());
         asteroid.setSpeed(50);
         asteroid.setDmg(10);
+        asteroid.setSize(3);
 
         // Set the rotation of the asteroid towards the center of the screen
         double centerX = gameData.getDisplayWidth() / 2;
@@ -63,13 +64,5 @@ public class AsteroidsPlugin implements IGamePluginService {
         asteroid.setRotation(Math.toDegrees(angle));
 
         return asteroid;
-    }
-
-    public double[] scaleAsteroid(double[] coords, double scale) {
-        double[] scaled = new double[coords.length];
-        for (int i = 0; i < coords.length; i++) {
-            scaled[i] = coords[i] * scale;
-        }
-        return scaled;
     }
 }

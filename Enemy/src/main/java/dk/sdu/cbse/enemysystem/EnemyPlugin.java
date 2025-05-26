@@ -33,6 +33,7 @@ public class EnemyPlugin implements IGamePluginService {
         enemyShip.setY((Math.random() * gameData.getDisplayHeight() + 1));
         enemyShip.setRadius(enemyShip.calcRadius());
         enemyShip.setHealth(5);
+        enemyShip.setDmg(1);
         System.out.println("Enemy created at position: " + enemyShip.getX() + ", " + enemyShip.getY());
         return enemyShip;
     }

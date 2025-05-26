@@ -8,10 +8,5 @@ import dk.sdu.cbse.common.data.Entity;
  * This class can be used to identify bullet entities in the game world.
  */
 public interface BulletMarker {
-    /**
-     * Sets the owner of the bullet.
-     *
-     * @param owner The entity that owns the bullet.
-     */
-    Entity getOwner();
+
 } 

@@ -8,8 +8,8 @@ import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.World;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
 import dk.sdu.cbse.common.services.IGamePluginService;
-import dk.sdu.cbse.commonbullet.BulletMarker;
-import dk.sdu.cbse.commonasteroid.AsteroidMarker;
+import dk.sdu.cbse.commonasteroid.IAsteroid;
+import dk.sdu.cbse.commonbullet.IBullet;
 
 public class CollisionProcessor implements IEntityProcessingService, IGamePluginService {
 
@@ -23,7 +23,7 @@ public class CollisionProcessor implements IEntityProcessingService, IGamePlugin
                 Entity entityB = entities.get(j);
 
                 if (checkCollision(entityA, entityB)) {
-                    handleCollision(entityA, entityB, world);
+                    handleCollision(entityA, entityB, gameData, world);
                 }
             }
         }
@@ -41,48 +41,44 @@ public class CollisionProcessor implements IEntityProcessingService, IGamePlugin
         return false;
     }
 
-    private void handleCollision(Entity entityA, Entity entityB, World world) {
+    private void handleCollision(Entity entityA, Entity entityB, GameData gameData, World world) {
 
-        
         // Bullet collision
-        if (entityA instanceof BulletMarker) {
-            BulletMarker bulletA = (BulletMarker) entityA;
-            if (bulletA.getOwner().getID().equals(entityB.getID())) {
-                // In case the bullet come from shooter and hit shooter do nothing
-                return;
-            }
-            entityA.setHealth(entityA.getHealth() - 1);
-            entityB.setHealth(entityB.getHealth() - 1);
+        handleBulletCollision(entityA, entityB, world);
+        // Asteroid collision
+        handleAsteroidCollision(entityA, entityB, gameData, world);
 
-        } else if (entityB instanceof BulletMarker) {
-            BulletMarker bulletB = (BulletMarker) entityB;
-            if (bulletB.getOwner().getID().equals(entityA.getID())) {
-                // In case the bullet come from shooter and hit shooter do nothing
-                return;
-            }
-            // Remove bullet from world and hit entity
-            entityB.setHealth(entityB.getHealth() - 1);
-            entityA.setHealth(entityA.getHealth() - 1);
-        }
-        // Astroid collision on Player, Enemy or Asteroid
-        boolean aIsAsteroid = entityA instanceof AsteroidMarker;
-        boolean bIsAsteroid = entityB instanceof AsteroidMarker;
-
-        // Substract Asteroid dmg from health
-        if (aIsAsteroid && bIsAsteroid) {
-            entityA.setHealth(entityA.getHealth() - entityA.getDmg());
-            entityB.setHealth(entityB.getHealth() - entityB.getDmg());
-        } else if (aIsAsteroid) {
-            entityB.setHealth(entityB.getHealth() - entityA.getDmg());
-        } else if (bIsAsteroid) {
-            entityA.setHealth(entityA.getHealth() - entityB.getDmg());
-        }
-
+        // Remove entities if health is 0 or less
         if (entityA.getHealth() <= 0) {
             world.removeEntity(entityA);
         }
         if (entityB.getHealth() <= 0) {
             world.removeEntity(entityB);
+        }
+    }
+
+    public void handleBulletCollision(Entity bullet, Entity target, World world) {
+        if (bullet instanceof IBullet) {
+            IBullet bulletEntity = (IBullet) bullet;
+            if (bulletEntity.getOwner().getID().equals(target.getID())) {
+                // In case the bullet come from shooter and hit shooter do nothing
+                return;
+            }
+            target.setHealth(target.getHealth() - bullet.getDmg());
+            world.removeEntity(bullet);
+        }
+    }
+
+    public void handleAsteroidCollision(Entity asteroid, Entity target, GameData gameData, World world) {
+        if (asteroid instanceof IAsteroid && target instanceof IAsteroid) {
+            ((IAsteroid) asteroid).splitAsteroid(gameData, world, asteroid);
+            ((IAsteroid) target).splitAsteroid(gameData, world, target);
+        } else if (asteroid instanceof IAsteroid) {
+            ((IAsteroid) asteroid).splitAsteroid(gameData, world, asteroid);
+            target.setHealth(target.getHealth() - asteroid.getDmg());
+        } else if (target instanceof IAsteroid) {
+            ((IAsteroid) target).splitAsteroid(gameData, world, target);
+            asteroid.setHealth(asteroid.getHealth() - target.getDmg());
         }
 
     }
