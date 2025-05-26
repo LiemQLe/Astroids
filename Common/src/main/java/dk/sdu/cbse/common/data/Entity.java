@@ -19,6 +19,8 @@ public class Entity {
     private float speed;
     private double radius;
 
+    private int health = 1;
+
     public Entity() {
         this.ID = UUID.randomUUID();
     }
@@ -116,6 +118,11 @@ public class Entity {
         }
         return maxDistance;
     }
-
+    public int getHealth() {
+        return health;
+    }
+    public void setHealth(int health) {
+        this.health = health;
+    }
 
 }

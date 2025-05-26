@@ -1,5 +1,8 @@
 package dk.sdu.cbse.collisionsystem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dk.sdu.cbse.common.data.Entity;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.World;
@@ -12,49 +15,64 @@ public class CollisionProcessor implements IEntityProcessingService, IGamePlugin
 
     @Override
     public void process(GameData gameData, World world) {
-        for (Entity entityA : world.getEntities()) {
-            for (Entity entityB : world.getEntities()) {
-                if (entityA != entityB && checkCollision(entityA, entityB)) {
+        List<Entity> entities = new ArrayList<>(world.getEntities());
+
+        for (int i = 0; i < entities.size(); i++) {
+            for (int j = i + 1; j < entities.size(); j++) {
+                Entity entityA = entities.get(i);
+                Entity entityB = entities.get(j);
+
+                if (checkCollision(entityA, entityB)) {
                     handleCollision(entityA, entityB, world);
                 }
             }
         }
+
     }
 
     private boolean checkCollision(Entity entityA, Entity entityB) {
         double radiusSum = entityA.getRadius() + entityB.getRadius();
-        double dist = Math.sqrt(Math.pow(entityA.getX() - entityB.getX(), 2) + Math.pow(entityA.getY() - entityB.getY(), 2));
-        if( dist < radiusSum) {
-            
+        double dist = Math
+                .sqrt(Math.pow(entityA.getX() - entityB.getX(), 2) + Math.pow(entityA.getY() - entityB.getY(), 2));
+        if (dist < radiusSum) {
+
             return true;
         }
         return false;
     }
 
     private void handleCollision(Entity entityA, Entity entityB, World world) {
-       
+
+        System.out.println("Handling collision: " + entityA.getClass().getSimpleName() + " <--> " + entityB.getClass().getSimpleName());
+
+
         // Bullet collision
-        if (entityA instanceof BulletMarker){
+        if (entityA instanceof BulletMarker) {
             BulletMarker bulletA = (BulletMarker) entityA;
-            if(bulletA.getOwner().getID().equals(entityB.getID())){
+            if (bulletA.getOwner().getID().equals(entityB.getID())) {
+                // In case the bullet come from shooter and hit shooter do nothing
+                return;
+            }
+            entityA.setHealth(entityA.getHealth() - 1);
+            entityB.setHealth(entityB.getHealth() - 1);
+
+        } else if (entityB instanceof BulletMarker) {
+            BulletMarker bulletB = (BulletMarker) entityB;
+            if (bulletB.getOwner().getID().equals(entityA.getID())) {
                 // In case the bullet come from shooter and hit shooter do nothing
                 return;
             }
             // Remove bullet from world and hit entity
-            world.removeEntity((Entity) bulletA);
-            world.removeEntity((Entity) entityB);
-
-        }else if (entityB instanceof BulletMarker){
-            BulletMarker bulletB = (BulletMarker) entityB;
-            if(bulletB.getOwner().getID().equals(entityA.getID())){
-                //In case the bullet come from shooter and hit shooter do nothing
-                return;
-            }
-            // Remove bullet from world and hit entity
-            world.removeEntity((Entity) bulletB);
-            world.removeEntity((Entity) entityA);
+            entityB.setHealth(entityB.getHealth() - 1);
+            entityA.setHealth(entityA.getHealth() - 1);
         }
 
+        if (entityA.getHealth() <= 0) {
+            world.removeEntity(entityA);
+        }
+        if (entityB.getHealth() <= 0) {
+            world.removeEntity(entityB);
+        }
 
     }
 
