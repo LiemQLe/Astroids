@@ -33,11 +33,12 @@ public void process(GameData gameData, World world) {
 
         // Used to make sure the bullets won't hurt the shooter itself
         bullet.setOwner(e);
-        bullet.setSpeed(600f);
+        bullet.setSpeed(300f);
         bullet.setPosition(e.getX() , e.getY());
         bullet.setRotation(e.getRotation());
-        bullet.setPolygonCoordination(1, -1, 1, 1, -1, 1, -1, -1);
+        bullet.setPolygonCoordination(2, -2, 2, 2, -2, 2, -2, -2);
         bullet.setRadius(bullet.calcRadius());
+        bullet.setDmg(1);
 
         return bullet;
 

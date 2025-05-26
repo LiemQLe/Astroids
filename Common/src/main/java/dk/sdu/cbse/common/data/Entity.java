@@ -1,7 +1,7 @@
 package dk.sdu.cbse.common.data;
 
 import java.util.UUID;
-import javafx.scene.shape.Polygon;
+
 
 public class Entity {
     
@@ -20,6 +20,7 @@ public class Entity {
     private double radius;
 
     private int health = 1;
+    private int dmg = 0;
 
     public Entity() {
         this.ID = UUID.randomUUID();
@@ -123,6 +124,14 @@ public class Entity {
     }
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public void setDmg(int dmg){
+        this.dmg = dmg;
+    }
+
+    public int getDmg(){
+        return this.dmg;
     }
 
 }

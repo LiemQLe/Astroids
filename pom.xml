@@ -11,6 +11,7 @@
   <modules>
     <module>Common</module>
     <module>Asteroid</module>
+    <module>CommonAsteroid</module>
     <module>CommonBullet</module>
     <module>Bullet</module>
     <module>Player</module>

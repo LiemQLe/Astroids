@@ -8,8 +8,8 @@ import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.World;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
 import dk.sdu.cbse.common.services.IGamePluginService;
-import javafx.scene.shape.Shape;
 import dk.sdu.cbse.commonbullet.BulletMarker;
+import dk.sdu.cbse.commonasteroid.AsteroidMarker;
 
 public class CollisionProcessor implements IEntityProcessingService, IGamePluginService {
 
@@ -43,9 +43,7 @@ public class CollisionProcessor implements IEntityProcessingService, IGamePlugin
 
     private void handleCollision(Entity entityA, Entity entityB, World world) {
 
-        System.out.println("Handling collision: " + entityA.getClass().getSimpleName() + " <--> " + entityB.getClass().getSimpleName());
-
-
+        
         // Bullet collision
         if (entityA instanceof BulletMarker) {
             BulletMarker bulletA = (BulletMarker) entityA;
@@ -65,6 +63,19 @@ public class CollisionProcessor implements IEntityProcessingService, IGamePlugin
             // Remove bullet from world and hit entity
             entityB.setHealth(entityB.getHealth() - 1);
             entityA.setHealth(entityA.getHealth() - 1);
+        }
+        // Astroid collision on Player, Enemy or Asteroid
+        boolean aIsAsteroid = entityA instanceof AsteroidMarker;
+        boolean bIsAsteroid = entityB instanceof AsteroidMarker;
+
+        // Substract Asteroid dmg from health
+        if (aIsAsteroid && bIsAsteroid) {
+            entityA.setHealth(entityA.getHealth() - entityA.getDmg());
+            entityB.setHealth(entityB.getHealth() - entityB.getDmg());
+        } else if (aIsAsteroid) {
+            entityB.setHealth(entityB.getHealth() - entityA.getDmg());
+        } else if (bIsAsteroid) {
+            entityA.setHealth(entityA.getHealth() - entityB.getDmg());
         }
 
         if (entityA.getHealth() <= 0) {
