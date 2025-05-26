@@ -17,6 +17,8 @@ public class PlayerControlSystem implements IEntityProcessingService {
     @Override
     public void process(GameData gameData, World world) {
         for (Entity player : world.getEntities(Player.class)) {
+            double delta = gameData.getDelta();
+            
             if (gameData.getKeys().isDown(GameKeys.LEFT)) {
                 player.setRotation(player.getRotation() - 5);
             }
@@ -24,7 +26,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 player.setRotation(player.getRotation() + 5);
             }
             if (gameData.getKeys().isDown(GameKeys.UP)) {
-                double delta = gameData.getDelta();
 
                 double dx = Math.cos(Math.toRadians(player.getRotation()))* delta * player.getSpeed();
                 double dy = Math.sin(Math.toRadians(player.getRotation()))* delta * player.getSpeed();
@@ -33,11 +34,18 @@ public class PlayerControlSystem implements IEntityProcessingService {
                 player.setY(player.getY() + dy);
             }
             if (gameData.getKeys().isDown(GameKeys.SPACE)) {
-
-                getBulletSPI().stream().findFirst().ifPresent(
-                        spi -> {
-                            world.addEntity(spi.createBullet(player, gameData));
-                        });
+                // Byllet cooldown logic
+                Player p = (Player) player;
+                if (p.getBulletCooldown() <= 0) {
+                    getBulletSPI().stream().findFirst().ifPresent(
+                            spi -> {
+                                world.addEntity(spi.createBullet(player, gameData));
+                            });
+                    p.setBulletCooldown(0.5); // Set cooldown to 0.5 second
+                } else {
+                    p.setBulletCooldown(p.getBulletCooldown() - gameData.getDelta());
+                    System.out.println("Bullet cooldown: " + p.getBulletCooldown());
+                }
                     
             }
 
