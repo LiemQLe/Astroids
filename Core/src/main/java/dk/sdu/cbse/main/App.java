@@ -150,11 +150,7 @@ public class App extends Application {
                 polygon = new Polygon(entity.getPolygonCoordinates());
 
                 polygons.put(entity, polygon);
-                gameWindow.getChildren().add(polygon);
-
-                
-                
-                
+                gameWindow.getChildren().add(polygon);                
             }
             // Set the color of the polygon based on the entity type
             if (entity.getClass().getSimpleName().equals("Player")) {
@@ -166,7 +162,10 @@ public class App extends Application {
             } else if (entity.getClass().getSimpleName().equals("Asteroid")) {
                 polygon.setFill(null);
                 polygon.setStroke(Color.SLATEGRAY);
-            }      
+            } else if (entity.getClass().getSimpleName().equals("Enemy")) {
+                polygon.setFill(Color.RED);
+                polygon.setStroke(Color.DARKRED);
+            } 
             
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());

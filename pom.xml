@@ -16,6 +16,7 @@
     <module>Player</module>
     <module>Collision</module>
     <module>Core</module>
+    <module>Enemy</module>
   </modules>
   <properties>
     <java>java</java>

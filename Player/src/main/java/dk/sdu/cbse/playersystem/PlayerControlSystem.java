@@ -44,7 +44,6 @@ public class PlayerControlSystem implements IEntityProcessingService {
                     p.setBulletCooldown(0.5); // Set cooldown to 0.5 second
                 } else {
                     p.setBulletCooldown(p.getBulletCooldown() - gameData.getDelta());
-                    System.out.println("Bullet cooldown: " + p.getBulletCooldown());
                 }
                     
             }
