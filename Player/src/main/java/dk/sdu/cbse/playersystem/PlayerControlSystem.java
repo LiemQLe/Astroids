@@ -8,7 +8,7 @@ import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.GameKeys;
 import dk.sdu.cbse.common.data.World;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
-import dk.sdu.cbse.commonbullet.BulletSpawnerInterface;
+import dk.sdu.cbse.commonbullet.BulletSpawnerService;
 
 import static java.util.stream.Collectors.toList;
 
@@ -68,8 +68,8 @@ public class PlayerControlSystem implements IEntityProcessingService {
     }
 
     // Service loader for bullet spawner
-    private Collection<? extends BulletSpawnerInterface> getBulletSPI() {
-        return ServiceLoader.load(BulletSpawnerInterface.class).stream().map(ServiceLoader.Provider::get)
+    private Collection<? extends BulletSpawnerService> getBulletSPI() {
+        return ServiceLoader.load(BulletSpawnerService.class).stream().map(ServiceLoader.Provider::get)
                 .collect(toList());
     }
 }

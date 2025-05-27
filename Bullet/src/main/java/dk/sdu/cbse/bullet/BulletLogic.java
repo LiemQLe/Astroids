@@ -3,9 +3,9 @@ import dk.sdu.cbse.common.data.Entity;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.World;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
-import dk.sdu.cbse.commonbullet.BulletSpawnerInterface;
+import dk.sdu.cbse.commonbullet.BulletSpawnerService;
 
-public class BulletLogic implements IEntityProcessingService, BulletSpawnerInterface {
+public class BulletLogic implements IEntityProcessingService, BulletSpawnerService {
 
    @Override
 public void process(GameData gameData, World world) {
