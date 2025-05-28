@@ -5,6 +5,7 @@ import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.World;
 import dk.sdu.cbse.common.services.IGamePluginService;
 
+
 public class AsteroidsPlugin implements IGamePluginService {
 
     @Override
