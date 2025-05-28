@@ -11,6 +11,7 @@
   <modules>
     <module>Common</module>
     <module>Asteroid</module>
+    <module>Asteroid2</module>
     <module>CommonAsteroid</module>
     <module>CommonBullet</module>
     <module>Bullet</module>
@@ -135,6 +136,9 @@
                 <fileset>
                   <directory>libs</directory>
                 </fileset>
+                <fileset>
+                  <directory>split-packages</directory>
+                </fileset>
               </filesets>
             </configuration>
           </plugin>
@@ -145,6 +149,7 @@
       <id>child-project</id>
       <activation>
         <file>
+          <missing>split-activation</missing>
           <exists>src</exists>
         </file>
       </activation>
@@ -170,6 +175,42 @@
                     </artifactItem>
                   </artifactItems>
                   <outputDirectory>../mods-mvn</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>child-project2</id>
+      <activation>
+        <file>
+          <exists>split-package</exists>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.0.2</version>
+            <executions>
+              <execution>
+                <id>copy-installed</id>
+                <phase>install</phase>
+                <goals>
+                  <goal>copy</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>${project.groupId}</groupId>
+                      <artifactId>${project.artifactId}</artifactId>
+                      <version>${project.version}</version>
+                      <type>jar</type>
+                    </artifactItem>
+                  </artifactItems>
+                  <outputDirectory>../layer2-packages</outputDirectory>
                 </configuration>
               </execution>
             </executions>

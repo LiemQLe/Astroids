@@ -11,11 +11,21 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
 import static java.util.stream.Collectors.toList;
 
+import java.io.ObjectInputFilter.Config;
+import java.lang.module.Configuration;
+import java.lang.module.ModuleDescriptor;
+import java.lang.module.ModuleFinder;
+import java.lang.module.ModuleReference;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import dk.sdu.cbse.common.data.Entity;
@@ -95,7 +105,6 @@ public class App extends Application {
         primaryStage.setTitle("Asteroids");
         primaryStage.show();
 
-
     }
 
     private void update() {
@@ -133,7 +142,6 @@ public class App extends Application {
     }
 
     private void draw() {
-       
 
         for (Entity entity : polygons.keySet()) {
             if (!world.getEntities().contains(entity)) {
@@ -150,7 +158,7 @@ public class App extends Application {
                 polygon = new Polygon(entity.getPolygonCoordinates());
 
                 polygons.put(entity, polygon);
-                gameWindow.getChildren().add(polygon);                
+                gameWindow.getChildren().add(polygon);
             }
             // Set the color of the polygon based on the entity type
             if (entity.getClass().getSimpleName().equals("Player")) {
@@ -165,8 +173,8 @@ public class App extends Application {
             } else if (entity.getClass().getSimpleName().equals("Enemy")) {
                 polygon.setFill(Color.RED);
                 polygon.setStroke(Color.DARKRED);
-            } 
-            
+            }
+
             polygon.setTranslateX(entity.getX());
             polygon.setTranslateY(entity.getY());
             polygon.setRotate(entity.getRotation());
@@ -174,18 +182,35 @@ public class App extends Application {
 
     }
 
+    
+    private ModuleLayer getModuleLayer() {
+        ModuleFinder moduleFinder = ModuleFinder.of(Paths.get("layer2-packages"));
+        ModuleLayer parentLayer = ModuleLayer.boot();
+        List<String> moduleList = moduleFinder.findAll()
+                                .stream()
+                                .map(m -> m.descriptor()
+                                .name())
+                                .collect(toList());
+                                                   
+        Configuration cf = parentLayer.configuration()
+                .resolve(moduleFinder, ModuleFinder.of(), moduleList);
+        ModuleLayer myl = parentLayer.defineModulesWithOneLoader(cf, ClassLoader.getSystemClassLoader());
+        return myl;
+    }
+
     private Collection<? extends IGamePluginService> getPluginServices() {
-        return ServiceLoader.load(IGamePluginService.class).stream().map(ServiceLoader.Provider::get).collect(toList());
+        return ServiceLoader.load(getModuleLayer(), IGamePluginService.class).stream().map(ServiceLoader.Provider::get)
+                .collect(toList());
     }
 
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
-        return ServiceLoader.load(IEntityProcessingService.class).stream().map(ServiceLoader.Provider::get)
-                .collect(toList());
+        return ServiceLoader.load(getModuleLayer(), IEntityProcessingService.class).stream()
+                .map(ServiceLoader.Provider::get).collect(toList());
     }
 
     private Collection<? extends IPostEntityProcessingService> getPostEntityProcessingServices() {
-        return ServiceLoader.load(IPostEntityProcessingService.class).stream().map(ServiceLoader.Provider::get)
-                .collect(toList());
+        return ServiceLoader.load(getModuleLayer(), IPostEntityProcessingService.class).stream()
+                .map(ServiceLoader.Provider::get).collect(toList());
     }
 
 }
