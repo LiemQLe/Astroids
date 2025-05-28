@@ -1,4 +1,4 @@
 module CommonBullet {
-    requires Common;
+    requires transitive Common;
     exports dk.sdu.cbse.commonbullet;
 }

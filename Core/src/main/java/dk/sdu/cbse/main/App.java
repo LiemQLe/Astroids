@@ -15,19 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
-
 import static java.util.stream.Collectors.toList;
 
-import java.io.ObjectInputFilter.Config;
 import java.lang.module.Configuration;
-import java.lang.module.ModuleDescriptor;
 import java.lang.module.ModuleFinder;
-import java.lang.module.ModuleReference;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-
 import dk.sdu.cbse.common.data.Entity;
 import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.World;
@@ -181,7 +173,7 @@ public class App extends Application {
         }
 
     }
-
+            
     
     private ModuleLayer getModuleLayer() {
         ModuleFinder moduleFinder = ModuleFinder.of(Paths.get("layer2-packages"));
