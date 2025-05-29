@@ -17,10 +17,6 @@ public class AsteroidsProcessor implements IEntityProcessingService {
 
         // Check if enough time has passed since the last spawn
         if (currentTime - lastSpawnTime >= spawnInterval) {
-            System.out.println("Spawning new asteroid");
-            
-        }
-        if (currentTime - lastSpawnTime >= spawnInterval) {
             createAsteroid(gameData, world);
             lastSpawnTime = currentTime;
         }

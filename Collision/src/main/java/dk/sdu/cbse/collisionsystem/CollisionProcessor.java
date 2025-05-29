@@ -10,6 +10,8 @@ import dk.sdu.cbse.common.services.IEntityProcessingService;
 import dk.sdu.cbse.common.services.IGamePluginService;
 import dk.sdu.cbse.commonasteroid.IAsteroid;
 import dk.sdu.cbse.commonbullet.IBullet;
+import dk.sdu.cbse.commonplayer.IPlayer;
+import org.springframework.web.client.RestTemplate;
 
 public class CollisionProcessor implements IEntityProcessingService, IGamePluginService {
 
@@ -42,12 +44,19 @@ public class CollisionProcessor implements IEntityProcessingService, IGamePlugin
     }
 
     private void handleCollision(Entity entityA, Entity entityB, GameData gameData, World world) {
-
-        // Bullet collision
-        handleBulletCollision(entityA, entityB, world);
-        // Asteroid collision
-        handleAsteroidCollision(entityA, entityB, gameData, world);
-
+        
+        // Only allow bullets to handle collision with asteroids, not the other way around
+        if (entityA instanceof IBullet) {
+            handleBulletCollision(entityA, entityB, world);
+        } else if (entityB instanceof IBullet) {
+            handleBulletCollision(entityB, entityA, world);
+        }
+    
+        // Asteroid-asteroid or asteroid-player collisions only
+        if ((entityA instanceof IAsteroid) || (entityB instanceof IAsteroid)) {
+            handleAsteroidCollision(entityA, entityB, gameData, world);
+        }
+    
         // Remove entities if health is 0 or less
         if (entityA.getHealth() <= 0) {
             world.removeEntity(entityA);
@@ -56,9 +65,12 @@ public class CollisionProcessor implements IEntityProcessingService, IGamePlugin
             world.removeEntity(entityB);
         }
     }
+    
 
     public void handleBulletCollision(Entity bullet, Entity target, World world) {
         if (bullet instanceof IBullet) {
+            RestTemplate restTemplate = new RestTemplate();
+
             IBullet bulletEntity = (IBullet) bullet;
             if (bulletEntity.getOwner().getID().equals(target.getID())) {
                 // In case the bullet come from shooter and hit shooter do nothing
@@ -66,6 +78,14 @@ public class CollisionProcessor implements IEntityProcessingService, IGamePlugin
             }
             target.setHealth(target.getHealth() - bullet.getDmg());
             world.removeEntity(bullet);
+            if (bulletEntity.getOwner() instanceof IPlayer) {
+                // If the bullet is from a player, increase the score by 10 points
+                restTemplate.postForObject("http://localhost:8080/score/player?points=10", null, Void.class);
+                System.out.println("Player hit an asteroid, score increased by 10 points.");
+            } else {
+                // If the bullet is from an enemy, increase the enemy score by 10 points
+                restTemplate.postForObject("http://localhost:8080/score/enemy?points=10", null, Void.class);
+            }
         }
     }
 

@@ -1,8 +1,9 @@
 package dk.sdu.cbse.playersystem;
 
+import dk.sdu.cbse.commonplayer.IPlayer;
 import dk.sdu.cbse.common.data.Entity;
 
-public class Player extends Entity{
+public class Player extends Entity implements IPlayer{
     double bulletCooldown = 0;
     
     double getBulletCooldown() {

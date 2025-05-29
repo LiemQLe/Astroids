@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.springframework.web.client.RestTemplate;
+
 import static java.util.stream.Collectors.toList;
 
 import java.lang.module.Configuration;
@@ -21,7 +24,7 @@ import java.lang.module.ModuleFinder;
 import java.nio.file.Paths;
 import dk.sdu.cbse.common.data.Entity;
 import dk.sdu.cbse.common.data.GameData;
-import dk.sdu.cbse.common.data.World;
+import dk.sdu.cbse.common.data.World;   
 import dk.sdu.cbse.common.data.GameKeys;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
 import dk.sdu.cbse.common.services.IPostEntityProcessingService;
@@ -37,10 +40,11 @@ public class Game {
     private final GameData gameData = new GameData();
     private final World world = new World();
     private final Pane gameWindow = new Pane();
+    private Text destroyedAsteroids= new Text(10, 20, "Destroyed asteroids:");
 
     public void start(Stage primaryStage) {
 
-        Text destroyedAsteroids = new Text(10, 20, "Destroyed asteroids: 0");
+        
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
         gameWindow.getChildren().add(destroyedAsteroids);
 
@@ -121,6 +125,17 @@ public class Game {
                 gameData.getKeys().update();
 
                 lastTime = now;
+
+                // Update the destroyed asteroids count
+                try {
+                    RestTemplate restTemplate = new RestTemplate();
+                    String playerScore = restTemplate.getForObject("http://localhost:8080/score/player", String.class);
+                    destroyedAsteroids.setText("Destroyed asteroids: " + playerScore);
+                } catch (Exception e) {
+                    destroyedAsteroids.setText("Score unavailable");
+                    System.err.println("Failed to fetch score: " + e.getMessage());
+                }
+                
             }
 
         }.start();
