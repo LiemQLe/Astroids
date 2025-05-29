@@ -12,35 +12,29 @@ import java.util.ServiceLoader;
 import dk.sdu.cbse.common.data.Entity;
 
 public class EnemyControlSystem implements IEntityProcessingService {
-    private long currentTime = System.currentTimeMillis();
     private long lastMoveTime = 0;
-    private static long moveIntierval = 2000; // Move every 2 seconds
-    private static int moveCount = 0;
+    private static long rotateIntierval = 1000; // Rotate every 1 seconds
 
     @Override
     public void process(GameData gameData, World world) {
 
         for (Entity enemy : world.getEntities(Enemy.class)) {
-            //time elapsed
+            // time elapsed
             double delta = gameData.getDelta();
-           
-            if(currentTime - lastMoveTime >= moveIntierval) {
-                double dx = Math.cos(Math.toRadians(enemy.getRotation())) * delta * enemy.getSpeed();
-                double dy = Math.sin(Math.toRadians(enemy.getRotation())) * delta * enemy.getSpeed();
-                enemy.setX(enemy.getX() + dx);
-                enemy.setY(enemy.getY() + dy);
+            long currentTime = System.currentTimeMillis();
+
+            double dx = Math.cos(Math.toRadians(enemy.getRotation())) * delta * enemy.getSpeed();
+            double dy = Math.sin(Math.toRadians(enemy.getRotation())) * delta * enemy.getSpeed();
+            enemy.setX(enemy.getX() + dx);
+            enemy.setY(enemy.getY() + dy);
+
+            if (currentTime - lastMoveTime >= rotateIntierval) {
                 lastMoveTime = currentTime;
-                moveCount++;
-                // Every 20 moves, set a random rotation for the enemy should be changed to the player position
-                if(moveCount >= 20) {
-                    // Set random rotation for enemy
-                    enemy.setRotation(Math.random() * 360);
-                    moveCount = 0;
-                }
+                enemy.setRotation(Math.random() * 360);
+
             }
 
-
-            // Byllet cooldown logic
+            // Bullet cooldown logic
             Enemy e = (Enemy) enemy;
             if (e.getBulletCooldown() <= 0) {
                 getBulletSPI().stream().findFirst().ifPresent(
@@ -65,7 +59,7 @@ public class EnemyControlSystem implements IEntityProcessingService {
             if (enemy.getY() > gameData.getDisplayHeight()) {
                 enemy.setY(gameData.getDisplayHeight() - 1);
             }
-            
+
         }
     }
 
