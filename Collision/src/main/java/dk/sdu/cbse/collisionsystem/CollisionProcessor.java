@@ -8,12 +8,13 @@ import dk.sdu.cbse.common.data.GameData;
 import dk.sdu.cbse.common.data.World;
 import dk.sdu.cbse.common.services.IEntityProcessingService;
 import dk.sdu.cbse.common.services.IGamePluginService;
+import dk.sdu.cbse.common.services.IPostEntityProcessingService;
 import dk.sdu.cbse.commonasteroid.IAsteroid;
 import dk.sdu.cbse.commonbullet.IBullet;
 import dk.sdu.cbse.commonplayer.IPlayer;
 import org.springframework.web.client.RestTemplate;
 
-public class CollisionProcessor implements IEntityProcessingService, IGamePluginService {
+public class CollisionProcessor implements IPostEntityProcessingService, IGamePluginService {
 
     @Override
     public void process(GameData gameData, World world) {

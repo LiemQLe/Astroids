@@ -7,6 +7,6 @@ module Collision {
     requires spring.web;
     requires spring.core;
 
-    provides dk.sdu.cbse.common.services.IEntityProcessingService with dk.sdu.cbse.collisionsystem.CollisionProcessor;
+    provides dk.sdu.cbse.common.services.IPostEntityProcessingService with dk.sdu.cbse.collisionsystem.CollisionProcessor;
     provides dk.sdu.cbse.common.services.IGamePluginService with dk.sdu.cbse.collisionsystem.CollisionProcessor;
 }
